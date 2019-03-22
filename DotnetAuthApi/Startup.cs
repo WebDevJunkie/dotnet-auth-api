@@ -93,7 +93,7 @@ namespace DotnetAuthApi
             {
                 options.AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowAnyOrigin()
+                .AllowAnyOrigin();
             });
 
             app.UseHttpsRedirection();
