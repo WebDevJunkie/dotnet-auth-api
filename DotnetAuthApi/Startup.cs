@@ -89,6 +89,13 @@ namespace DotnetAuthApi
                 app.UseHsts();
             }
 
+            app.UseCors(options =>
+            {
+                options.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+            });
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
