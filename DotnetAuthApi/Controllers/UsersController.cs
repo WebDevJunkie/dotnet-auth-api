@@ -1,5 +1,7 @@
 ﻿using DotnetAuthApi.Dtos;
 using DotnetAuthApi.Entities;
+using DotnetAuthApi.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,10 +19,18 @@ namespace DotnetAuthApi.Controllers
     public class UsersController : Controller
     {
         private UserManager<User> _userManager;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        [HttpGet("user")]
+        public async Task<IActionResult> user()
+        {
+            return Ok(_httpContextAccessor.CurrentUser());
         }
 
         [HttpPost("register")]
