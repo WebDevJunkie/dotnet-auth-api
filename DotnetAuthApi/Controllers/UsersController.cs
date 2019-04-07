@@ -1,6 +1,8 @@
-﻿using DotnetAuthApi.Dtos;
+﻿using AutoMapper;
+using DotnetAuthApi.Dtos;
 using DotnetAuthApi.Entities;
 using DotnetAuthApi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +22,22 @@ namespace DotnetAuthApi.Controllers
     {
         private UserManager<User> _userManager;
         private IHttpContextAccessor _httpContextAccessor;
+        private IMapper _mapper;
 
-        public UsersController(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+        public UsersController(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
 
         [HttpGet("user")]
-        public async Task<IActionResult> user()
+        [Authorize]
+        public async Task<ActionResult<UserDto>> user()
         {
-            return Ok(_httpContextAccessor.CurrentUser());
+            var userEntity = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+            var userDto = _mapper.Map<UserDto>(userEntity);
+            return Ok(userDto);
         }
 
         [HttpPost("register")]
