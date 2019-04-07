@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DotnetAuthApi.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,9 @@ namespace DotnetAuthApi
             services.AddIdentityCore<User>()
                 .AddEntityFrameworkStores<Context>()
                 .AddDefaultTokenProviders();
+
+
+            services.AddAutoMapper();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -98,6 +102,7 @@ namespace DotnetAuthApi
                 .AllowAnyOrigin();
             });
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
