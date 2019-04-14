@@ -33,9 +33,10 @@ namespace DotnetAuthApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("AuthDatabase");
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<Context>(
-                options => options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=AuthDotnet;Trusted_Connection=True;"));
+                options => options.UseSqlServer(connectionString));
 
             services.AddIdentityCore<User>()
                 .AddEntityFrameworkStores<Context>()
